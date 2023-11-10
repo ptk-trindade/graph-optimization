@@ -1,13 +1,20 @@
 #ifndef PROBLEM_H
 #define PROBLEM_H
 
-#include "Item.h"
 #include <vector>
+#include <map>
+
+struct Item {
+    int prize;
+    int weight;
+    std::map<int, int> synergies;
+};
 
 class Problem {
 public:
     std::vector<Item> items;
     int capacity;
+
 };
 
 #endif // PROBLEM_H
