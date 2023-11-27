@@ -2,7 +2,6 @@
 #define SOLUTION_H
 
 #include "Problem.h"
-#include "SolutionStep.h"
 #include <vector>
 #include <map>
 

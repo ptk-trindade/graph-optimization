@@ -1,7 +1,6 @@
 #include "Solution.h"
 #include "Problem.h"
-#include "SolutionStep.h"
-#include "Item.h"
+
 
 Solution* grasp(Problem* problem, float alpha) {
     Solution* bestKnapsack;
