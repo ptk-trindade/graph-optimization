@@ -10,8 +10,8 @@
 struct Neighbor {
 public:
     int prize;
-    bool adding; // true = add; false = remove
-    int itemId; // item to be added/removed
+    std::vector<int> addedItems;
+    std::vector<int> removedItems;
 };
 
 class Solution {
@@ -22,7 +22,7 @@ public:
     std::vector<Item> items;
     int prize;
     int availableCapacity;
-    std::map<int, int> itemsInBackpack;
+    std::vector<bool> itemInBackpack;
     std::vector<Neighbor>& neighbors;
 
     const std::vector<Neighbor>& getNeighbors();
