@@ -1,14 +1,13 @@
 #include "Solution.h"
 
-Solution::Solution(Problem* problem, std::vector<int> initialItems) {
-    Problem* problem = problem;
+Solution::Solution(Problem* problem, std::vector<int> initialItems) : problem(*problem), neighbors(*new std::vector<Neighbor>())
+ {
     int availableCapacity = (*problem).capacity;
     int prize = 0;
     int total_items = (*problem).items.size();
 
     std::vector<bool> itemsInBackpack = std::vector<bool>(total_items);
     
-    std::vector<Neighbor> *neighbors = &std::vector<Neighbor>(0);
 
     
     for (int itemId : initialItems) {
