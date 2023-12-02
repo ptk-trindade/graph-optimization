@@ -22,7 +22,7 @@ public:
     std::vector<Item> items;
     int prize;
     int availableCapacity;
-    std::vector<bool> itemInBackpack;
+    std::vector<bool> itemsInBackpack;
     std::vector<Neighbor>& neighbors;
 
     const std::vector<Neighbor>& getNeighbors();

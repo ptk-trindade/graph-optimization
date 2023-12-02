@@ -1,4 +1,5 @@
 #include "Solution.h"
+#include <stdexcept>
 
 Solution::Solution(Problem* problem, std::vector<int> initialItems) : problem(*problem), neighbors(*new std::vector<Neighbor>())
  {
@@ -36,7 +37,7 @@ const std::vector<Neighbor>& Solution::getNeighbors() {
     // and return a const reference to the vector
 
         
-        if (itemInBackpack[i]) {
+        if (itemsInBackpack[i]) {
             int prizeChange = prizeChangeRemoving(i);
             if (prizeChange > 0) {
                 Neighbor neighbor;
@@ -63,17 +64,23 @@ const std::vector<Neighbor>& Solution::getNeighbors() {
 }
 
 void Solution::step(int neighborId) {
-    // TODO - change current solution based on the given step
+    Neighbor neighbor = neighbors[neighborId];
+
+    for (int itemId : neighbor.addedItems) {
+        itemsInBackpack[itemId] = true;
+    }
+
+    for (int itemId : neighbor.removedItems) {
+        itemsInBackpack[itemId] = false;
+    }
+
+    prize = neighbor.prize;
 }
 
 void Solution::randomWalk(float randomness) {
     // TODO - Randomlly adds/removes items from the backpack
 }
 
-// --- Private methods
-void Solution::add(int itemId) {
-    // TODO
-}
 
 int prizeChangeAdding(int itemId) {
     // TODO
