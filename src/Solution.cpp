@@ -3,6 +3,7 @@
 
 Solution::Solution(Problem* problem, std::vector<int> initialItems) : problem(*problem), neighbors(*new std::vector<Neighbor>())
  {
+    this->problem = *problem;
     int availableCapacity = (*problem).capacity;
     int prize = 0;
     int total_items = (*problem).items.size();
@@ -82,14 +83,30 @@ void Solution::randomWalk(float randomness) {
 }
 
 
-int prizeChangeAdding(int itemId) {
-    // TODO
+int Solution::prizeChangeAdding(int itemId) {
+    int prizeDelta;
+    prizeDelta = this->problem.items[itemId].prize;
+
+    // synergy: id, synergy
+    for (auto synergy : this->problem.items[itemId].synergies) {
+        if (this->itemsInBackpack[synergy.first]) {
+            prizeDelta -= synergy.second;
+        }
+    }
 }
 
 void Solution::remove(int itemId) {
     // TODO
 }
 
-int prizeChangeRemoving(int itemId) {
-    // TODO
+int Solution::prizeChangeRemoving(int itemId) {
+    int prizeDelta;
+    prizeDelta = -this->problem.items[itemId].prize;
+
+    // synergy: id, synergy
+    for (auto synergy : this->problem.items[itemId].synergies) {
+        if (this->itemsInBackpack[synergy.first]) {
+            prizeDelta += synergy.second;
+        }
+    }
 }
