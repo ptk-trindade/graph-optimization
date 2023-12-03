@@ -7,7 +7,7 @@
 struct Item {
     int prize;
     int weight;
-    std::vector<int,int> synergies;
+    std::vector<std::pair<int, int>> synergies; // id, synergy
 };
 
 class Problem {
