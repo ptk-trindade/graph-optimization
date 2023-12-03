@@ -1,6 +1,7 @@
-#include "Solution.h"
-#include "Problem.h"
+#include "../include/Solution.h"
+#include "../include/Problem.h"
 
+#include <string>
 
 Solution* grasp(Problem* problem, float alpha) {
     Solution* bestKnapsack;
@@ -32,7 +33,8 @@ Solution* grasp(Problem* problem, float alpha) {
 
 int main() {
     // Read file and create Problem
-    Problem problem;
+    const std::string filename = "data/sum_instances/500/kpf_1_sum.txt";
+    Problem problem(filename);
     float alpha = 0.7;
 
     grasp(&problem, alpha);

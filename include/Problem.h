@@ -3,18 +3,21 @@
 
 #include <vector>
 #include <map>
+#include <tuple>
 
 struct Item {
     int prize;
     int weight;
-    std::vector<int,int> synergies;
+    std::vector<std::tuple<int, int>> synergies;
 };
 
 class Problem {
 public:
+    Problem(const std::string& filename);
     std::vector<Item> items;
     int capacity;
 
+    Solution generateInitialSolution();
 };
 
 #endif // PROBLEM_H
