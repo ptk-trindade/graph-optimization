@@ -4,9 +4,9 @@
 Solution::Solution(Problem* problem, std::vector<int> initialItems) : problem(*problem), neighbors(*new std::vector<Neighbor>())
  {
     this->problem = *problem;
-    int availableCapacity = (*problem).capacity;
+    int availableCapacity = problem->capacity;
     int prize = 0;
-    int total_items = (*problem).items.size();
+    int total_items = problem->items.size();
 
     std::vector<bool> itemsInBackpack = std::vector<bool>(total_items);
     
