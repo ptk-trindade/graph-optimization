@@ -1,14 +1,14 @@
-#include "Solution.h"
-#include "Problem.h"
+#include "../include/Solution.h"
+#include "../include/Problem.h"
 
+#include <iostream>
 
-Solution* grasp(Problem* problem, float alpha) {
-    Solution* bestKnapsack;
+Solution* grasp(const Solution& initialSolution, float alpha) {
+    Solution* bestKnapsack = new Solution(initialSolution);
 
     bool stopCriteria;
     while (!stopCriteria) {
-        // Create random Solution
-        Solution solution(problem, std::vector<int>());
+        Solution solution(initialSolution);
 
         bool reachedLocalMax;
         while(!reachedLocalMax) {
@@ -30,12 +30,27 @@ Solution* grasp(Problem* problem, float alpha) {
 }
 
 
-int main() {
-    // Read file and create Problem
-    Problem problem;
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <numItems> <fileId>" << std::endl;
+        return 1;
+    }
+
+    // Get numItems and fileId from command line arguments
+    const std::string numItems = argv[1];
+    const std::string fileId = argv[2];
+    const std::string filename = "../data/sum_instances/" + numItems + "/kpf_" + fileId + "_sum.txt";
+
     float alpha = 0.7;
 
-    grasp(&problem, alpha);
+    // Read file and create Problem
+    Problem problem(filename);
+
+    // Get initial Solution
+    Solution initialSolution = problem.generateInitialSolution();
+
+    // Call the grasp function with the initial solution and alpha
+    Solution* bestSolution = grasp(initialSolution, alpha);
 
     return 0;
 }
