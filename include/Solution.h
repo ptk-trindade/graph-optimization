@@ -33,7 +33,8 @@ private:
     void add(int itemId);
     void remove(int itemId);
 
-    void calculatePrize();
+    int prizeChangeAdding(int itemId);
+    int prizeChangeRemoving(int itemId);
 };
 
 #endif // SOLUTION_H
