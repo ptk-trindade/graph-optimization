@@ -38,7 +38,7 @@ Problem::Problem(const std::string& filename) {
         for (int i = 0; i < numItems; ++i) {
             int synergy;
             file >> synergy;
-            items[i].synergies.push_back(std::make_tuple(penalty, synergy));
+            items[i].synergies.push_back(std::make_pair(penalty, synergy));
         }
     }
 
