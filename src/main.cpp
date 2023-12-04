@@ -1,7 +1,7 @@
 #include "../include/Solution.h"
 #include "../include/Problem.h"
 
-#include <string>
+#include <iostream>
 
 Solution* grasp(Problem* problem, float alpha) {
     Solution* bestKnapsack;
@@ -31,12 +31,24 @@ Solution* grasp(Problem* problem, float alpha) {
 }
 
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <numItems> <fileId>" << std::endl;
+        return 1;
+    }
+
+    // Get numItems and fileId from command line arguments
+    const std::string numItems = argv[1];
+    const std::string fileId = argv[2];
+
+    // Create filename based on numItems and fileId
+    const std::string filename = "../data/sum_instances/" + numItems + "/kpf_" + fileId + "_sum.txt";
+
     // Read file and create Problem
-    const std::string filename = "data/sum_instances/500/kpf_1_sum.txt";
     Problem problem(filename);
     float alpha = 0.7;
 
+    // Call your existing function with the problem and alpha
     grasp(&problem, alpha);
 
     return 0;

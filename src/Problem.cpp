@@ -52,6 +52,7 @@ Solution Problem::generateInitialSolution() {
     int availableCapacity = capacity;
     int prize = 0;
     int total_items = items.size();
+    int checked_items = 0;
 
     std::vector<bool> itemsInBackpack = std::vector<bool>(total_items);
 
@@ -64,6 +65,10 @@ Solution Problem::generateInitialSolution() {
                 prize += items[randomItem].prize;
                 initialItems.push_back(randomItem);
             }
+            checked_items++;
+        }
+        if (checked_items == total_items) {
+            break;
         }
     }
 
