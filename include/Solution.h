@@ -13,6 +13,7 @@ class Problem;
 struct Neighbor {
 public:
     int deltaPrize;
+    float heuristic;
     std::vector<int> addedItems;
     std::vector<int> removedItems;
 };
