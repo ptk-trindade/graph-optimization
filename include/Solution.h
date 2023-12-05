@@ -5,27 +5,29 @@
 #include <vector>
 #include <map>
 
+struct Item;
+class Problem;
+
 // You can think of Neighbor as a Solution prototype. 
 // It only has a few attributes since recreating all attributes would be costly
 struct Neighbor {
 public:
-    int prize;
+    int deltaPrize;
     std::vector<int> addedItems;
     std::vector<int> removedItems;
 };
 
 class Solution {
 public:
-    Solution(Problem *problem, std::vector<int> initialItems);
+    Solution(Problem* problem, std::vector<int> initialItems);
     Problem& problem;
 
-    std::vector<Item> items;
     int prize;
     int availableCapacity;
-    std::vector<bool> itemsInBackpack;
+    std::vector<bool> itemInBackpack;
     std::vector<Neighbor>& neighbors;
 
-    const std::vector<Neighbor>& getNeighbors();
+    std::vector<Neighbor>& getNeighbors();
     void step(int neighborId);
     void randomWalk(float randomness);
 

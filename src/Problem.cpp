@@ -2,6 +2,8 @@
 #include "../include/Solution.h"
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <time.h>
 
 Problem::Problem(const std::string& filename) {
     std::ifstream file(filename);
@@ -32,14 +34,12 @@ Problem::Problem(const std::string& filename) {
 
     // Read penalties
     for (int p = 0; p < numPenalties; ++p) {
-        int penalty;
-        file >> penalty;
+        int synergy, discard, item1, item2;
+        file >> discard >> synergy >> discard;
+        file >> item1 >> item2;
 
-        for (int i = 0; i < numItems; ++i) {
-            int synergy;
-            file >> synergy;
-            items[i].synergies.push_back(std::make_pair(penalty, synergy));
-        }
+        items[item1].synergies.push_back(std::make_pair(item2, synergy));
+        items[item2].synergies.push_back(std::make_pair(item1, synergy));
     }
 
     file.close();
@@ -50,25 +50,22 @@ Problem::Problem(const std::string& filename) {
 Solution Problem::generateInitialSolution() {
     std::vector<int> initialItems;
     int availableCapacity = capacity;
-    int prize = 0;
-    int total_items = items.size();
-    int checked_items = 0;
+    int totalItems = items.size();
+    int addedItems = 0;
+    std::vector<bool> itemInBackpack = std::vector<bool>(totalItems, false);
 
-    std::vector<bool> itemsInBackpack = std::vector<bool>(total_items);
+    int emptySpace = capacity - (rand() % capacity);
+    // std::cout << "random: " << emptySpace << std::endl;
 
-    while (availableCapacity > 0) {
-        int randomItem = rand() % total_items;
-        if (!itemsInBackpack[randomItem]) {
+    while (emptySpace < availableCapacity && addedItems < totalItems) {
+        int randomItem = rand() % totalItems;
+        if (!itemInBackpack[randomItem]) {
             if (items[randomItem].weight <= availableCapacity) {
-                itemsInBackpack[randomItem] = true;
+                itemInBackpack[randomItem] = true;
                 availableCapacity -= items[randomItem].weight;
-                prize += items[randomItem].prize;
                 initialItems.push_back(randomItem);
             }
-            checked_items++;
-        }
-        if (checked_items == total_items) {
-            break;
+            addedItems++;
         }
     }
 

@@ -1,9 +1,13 @@
 #ifndef PROBLEM_H
 #define PROBLEM_H
 
-#include <vector>
+#include "Solution.h"
 #include <map>
+#include <string>
 #include <tuple>
+#include <vector>
+
+class Solution;
 
 struct Item {
     int prize;
