@@ -13,7 +13,7 @@ class Problem;
 struct Neighbor {
 public:
     int deltaPrize;
-    float heuristic;
+    // float heuristic;
     std::vector<int> addedItems;
     std::vector<int> removedItems;
 };
@@ -30,12 +30,8 @@ public:
 
     std::vector<Neighbor>& getNeighbors();
     void step(int neighborId);
-    void randomWalk(float randomness);
 
 private:
-    void add(int itemId);
-    void remove(int itemId);
-
     int prizeChangeAdding(int itemId);
     int prizeChangeRemoving(int itemId);
 };

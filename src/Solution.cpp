@@ -35,7 +35,7 @@ std::vector<Neighbor>& Solution::getNeighbors() {
                 neighbor.deltaPrize = prizeChange;
                 neighbor.addedItems = std::vector<int>();
                 neighbor.removedItems = std::vector<int>(1, i);
-                neighbor.heuristic = float(prizeChange) / problem.items[i].weight;
+                // neighbor.heuristic = float(prizeChange * problem.items[i].weight);
                 neighbors.push_back(neighbor);
             }
         } else {
@@ -45,7 +45,7 @@ std::vector<Neighbor>& Solution::getNeighbors() {
                 neighbor.deltaPrize = prizeChange;
                 neighbor.addedItems = std::vector<int>(1, i);
                 neighbor.removedItems = std::vector<int>();
-                neighbor.heuristic = float(prizeChange) / problem.items[i].weight;
+                // neighbor.heuristic = float(prizeChange) / problem.items[i].weight;
                 neighbors.push_back(neighbor);
             }
         }
