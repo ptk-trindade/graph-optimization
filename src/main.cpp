@@ -19,14 +19,25 @@ Solution* grasp(Problem problem, float alpha) {
         std::vector<Neighbor>& neighbors = solution.getNeighbors();
 
         int iterations = 0;
-        while(!neighbors.empty()) {
-            iterations++;
+  
+        float maxHeuristic = -1.0f;
+        for (Neighbor neighbor : neighbors) {
+            if (neighbor.heuristic > maxHeuristic) {
+                maxHeuristic = neighbor.heuristic;
+            }
+        }
 
-            // Choose solution randomly based on alpha (break if no neighbor is better)
-            int neighborId = rand() % int(neighbors.size());
-            solution.step(neighborId);
+        std::vector<int> bestNeighbors;
+        float threshold = alpha * maxHeuristic;
+        for (int i = 0; i < neighbors.size(); ++i) {
+            if (neighbors[i].heuristic >= threshold) {
+                bestNeighbors.push_back(i);
+            }
+        }
 
-            neighbors = solution.getNeighbors();
+        if (!bestNeighbors.empty()) {
+            int randomIndex = rand() % bestNeighbors.size();
+            solution.step(bestNeighbors[randomIndex]);
         }
 
         if (bestKnapsack == nullptr || bestKnapsack->prize < solution.prize) {
