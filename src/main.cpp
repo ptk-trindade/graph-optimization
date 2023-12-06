@@ -54,26 +54,26 @@ Solution* grasp(Problem problem, float alpha) {
         Solution solution = problem.generateInitialSolution();
         std::vector<Neighbor>& neighbors = solution.getNeighbors();
 
-        while(!neighbors.empty()) {
-            // Choose solution randomly based on alpha (break if no neighbor is better)
-            int maxDelta = neighbors[0].deltaPrize;
-            for (Neighbor neighbor : neighbors) {
-                if (neighbor.deltaPrize > maxDelta) {
-                    maxDelta = neighbor.deltaPrize;
-                }
+        int iterations = 0;
+  
+        float maxHeuristic = -1.0f;
+        for (Neighbor neighbor : neighbors) {
+            if (neighbor.heuristic > maxHeuristic) {
+                maxHeuristic = neighbor.heuristic;
             }
+        }
 
-            std::vector<int> bestNeighbors;
-            for (int i = 0; i < int(neighbors.size()); i++) {
-                if (neighbors[i].deltaPrize >= maxDelta * alpha) {
-                    bestNeighbors.push_back(i);
-                }
+        std::vector<int> bestNeighbors;
+        float threshold = alpha * maxHeuristic;
+        for (int i = 0; i < neighbors.size(); ++i) {
+            if (neighbors[i].heuristic >= threshold) {
+                bestNeighbors.push_back(i);
             }
+        }
 
-            int neighborId = bestNeighbors[rand() % bestNeighbors.size()];
-            solution.step(neighborId);
-
-            neighbors = solution.getNeighbors();
+        if (!bestNeighbors.empty()) {
+            int randomIndex = rand() % bestNeighbors.size();
+            solution.step(bestNeighbors[randomIndex]);
         }
 
         if (bestKnapsack == nullptr || bestKnapsack->prize < solution.prize) {
