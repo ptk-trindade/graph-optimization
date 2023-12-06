@@ -3,39 +3,89 @@
 
 #include <iostream>
 #include <chrono>
+#include <vector>
+#include <math.h>
+
+void printStatistics(int bestKnapsackPrize, std::vector<float> timesTaken, std::vector<int> bestPrizes) {
+
+    float avgTime = 0;
+    float avgPrize = 0;
+    for (int i = 0; i < int(timesTaken.size()); i++) {
+        avgTime += timesTaken[i];
+        avgPrize += bestPrizes[i];
+    }
+
+    avgTime /= timesTaken.size();
+    avgPrize /= bestPrizes.size();
+
+    float cvTime = 0;
+    float cvPrize = 0;
+    for (int i = 0; i < int(timesTaken.size()); i++) {
+        cvTime += (timesTaken[i] - avgTime) * (timesTaken[i] - avgTime);
+        cvPrize += (bestPrizes[i] - avgPrize) * (bestPrizes[i] - avgPrize);
+    }
+
+    cvTime /= timesTaken.size();
+    cvPrize /= bestPrizes.size();
+
+    cvTime = sqrt(cvTime) / avgTime;
+    cvPrize = sqrt(cvPrize) / avgPrize;
+
+    std::cout << bestKnapsackPrize << "\t" << avgPrize << "\t" << cvPrize << "\t" << avgTime << "\t" << cvTime << std::endl;
+
+}
 
 Solution* grasp(Problem problem, float alpha) {
+    // statistics
+    std::vector<float> timesTaken;
+    std::vector<int> bestPrizes;
+
     Solution* bestKnapsack = new Solution(problem.generateInitialSolution());
-    std::cout << "prize inicial grasp: " << bestKnapsack->prize << std::endl;
 
     // current time
     std::chrono::time_point<std::chrono::system_clock> currentTime, endTime;
     currentTime = std::chrono::system_clock::now();
-    endTime = currentTime + std::chrono::seconds(10);
+    endTime = currentTime + std::chrono::minutes(1);
     while (currentTime < endTime) {
-        
+        // cronometro
+        auto statisticsTime = std::chrono::system_clock::now();
+
         // Get initial Solution
         Solution solution = problem.generateInitialSolution();
         std::vector<Neighbor>& neighbors = solution.getNeighbors();
 
-        int iterations = 0;
         while(!neighbors.empty()) {
-            iterations++;
-
             // Choose solution randomly based on alpha (break if no neighbor is better)
-            int neighborId = rand() % int(neighbors.size());
+            int maxDelta = neighbors[0].deltaPrize;
+            for (Neighbor neighbor : neighbors) {
+                if (neighbor.deltaPrize > maxDelta) {
+                    maxDelta = neighbor.deltaPrize;
+                }
+            }
+
+            std::vector<int> bestNeighbors;
+            for (int i = 0; i < int(neighbors.size()); i++) {
+                if (neighbors[i].deltaPrize >= maxDelta * alpha) {
+                    bestNeighbors.push_back(i);
+                }
+            }
+
+            int neighborId = bestNeighbors[rand() % bestNeighbors.size()];
             solution.step(neighborId);
 
             neighbors = solution.getNeighbors();
         }
 
         if (bestKnapsack == nullptr || bestKnapsack->prize < solution.prize) {
-            std::cout << "prize atualizado: " << solution.prize << std::endl;
             bestKnapsack = new Solution(solution);
         }
 
         currentTime = std::chrono::system_clock::now();
+        timesTaken.push_back(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - statisticsTime).count());
+        bestPrizes.push_back(solution.prize);
     }
+
+    printStatistics(bestKnapsack->prize, timesTaken, bestPrizes);
 
     return bestKnapsack;
 }
@@ -54,26 +104,25 @@ int main(int argc, char *argv[]) {
     const std::string fileId = argv[2];
     const std::string filename = "data/sum_instances/" + numItems + "/kpf_" + fileId + "_sum.txt";
 
-    std::cout << "File: " << filename << std::endl;
+    std::cout << numItems << "/kpf_" << fileId << "_sum.txt" << "\t";
 
-    float alpha = 0.7;
+    float alpha = 0.8;
 
     // Read file and create Problem
     Problem problem(filename);
 
     // Call the grasp function with the initial solution and alpha
-    Solution* bestKnapsack = grasp(problem, alpha);
-    std::cout << "prize inicial main: " << bestKnapsack->prize << std::endl;
+    grasp(problem, alpha); // Solution* bestKnapsack = 
 
-    // Print the best solution found
-    std::cout << "prize:" << bestKnapsack->prize << std::endl;
-    for (int i = 0; i < int(bestKnapsack->itemInBackpack.size()); i++) {
-        if (bestKnapsack->itemInBackpack[i]) {
-            std::cout << i << " ";
-        }
-    }
+    // // Print the best solution found
+    // std::cout << "prize:" << bestKnapsack->prize << std::endl;
+    // for (int i = 0; i < int(bestKnapsack->itemInBackpack.size()); i++) {
+    //     if (bestKnapsack->itemInBackpack[i]) {
+    //         std::cout << i << " ";
+    //     }
+    // }
     
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
     return 0;
 }

@@ -5,21 +5,17 @@
 Solution::Solution(Problem* problem, std::vector<int> initialItems) : problem(*problem), neighbors(*new std::vector<Neighbor>())
  {
     this->problem = *problem;
-    this->availableCapacity = problem->capacity;
-    this->neighbors = *new std::vector<Neighbor>();
+    availableCapacity = problem->capacity;
+    neighbors = *new std::vector<Neighbor>();
     prize = 0;
     int total_items = problem->items.size();
 
     itemInBackpack = std::vector<bool>(total_items);
     
     for (int itemId : initialItems) {
-        if (itemId >= 0 && itemId < total_items) {
-            availableCapacity -= problem->items[itemId].weight;
-            prize += prizeChangeAdding(itemId);
-            itemInBackpack[itemId] = true;
-        } else {
-            throw std::out_of_range("Invalid ID");
-        }
+        availableCapacity -= problem->items[itemId].weight;
+        prize += prizeChangeAdding(itemId);
+        itemInBackpack[itemId] = true;
     }
 }
 
@@ -32,12 +28,6 @@ std::vector<Neighbor>& Solution::getNeighbors() {
     }
     
     for (int i = 0; i < int(itemInBackpack.size()); i++) {        
-    // TODO - for each item in the backpack, prizeChangeRemoving
-    // and for each item not in the backpack, prizeChangeAdding
-    // fill vector this.neighbors (with possible steps)
-    // and return a const reference to the vector
-
-        
         if (itemInBackpack[i]) {
             int prizeChange = prizeChangeRemoving(i);
             if (prizeChange > 0) {
@@ -79,11 +69,6 @@ void Solution::step(int neighborId) {
     neighbors = *new std::vector<Neighbor>();
 }
 
-void Solution::randomWalk(float randomness) {
-    // TODO - Randomlly adds/removes items from the backpack
-}
-
-
 int Solution::prizeChangeAdding(int itemId) {
     int prizeDelta;
     prizeDelta = problem.items[itemId].prize;
@@ -98,17 +83,13 @@ int Solution::prizeChangeAdding(int itemId) {
     return prizeDelta;
 }
 
-void Solution::remove(int itemId) {
-    // TODO
-}
-
 int Solution::prizeChangeRemoving(int itemId) {
     int prizeDelta;
-    prizeDelta = -this->problem.items[itemId].prize;
+    prizeDelta = -problem.items[itemId].prize;
 
     // synergy: id, synergy
-    for (auto synergy : this->problem.items[itemId].synergies) {
-        if (this->itemInBackpack[synergy.first]) {
+    for (auto synergy : problem.items[itemId].synergies) {
+        if (itemInBackpack[synergy.first]) {
             prizeDelta += synergy.second;
         }
     }

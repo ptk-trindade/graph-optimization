@@ -1,0 +1,1 @@
+nome instancia |	melhor sol |	avg sol |	CV (coeficiente de variação) |	avg time |	CV time
